@@ -1,0 +1,41 @@
+/* src/App.css - Пример базовых стилей */
+.App {
+  text-align: center;
+  padding: 20px;
+  /* Используем цвета из темы Telegram Mini App */
+  background-color: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  min-height: 100vh; /* Занимаем всю высоту */
+}
+
+.App-header {
+  /* Убираем стандартные стили заголовка */
+}
+
+h1 {
+  color: var(--tg-theme-text-color);
+}
+
+p {
+   color: var(--tg-theme-hint-color); /* Или --tg-theme-text-color */
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  /* Используем цвета из темы Telegram Mini App */
+  background-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+   opacity: 0.9;
+}
+
+a {
+   color: var(--tg-theme-link-color);
+} 
