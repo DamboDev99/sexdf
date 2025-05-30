@@ -66,9 +66,6 @@ declare global {
 
 function App() {
   const [telegramUser, setTelegramUser] = useState<any>(null);
-  const [walletConnected, setWalletConnected] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [connectionLink, setConnectionLink] = useState<string | null>(null);
 
   useEffect(() => {
     // Инициализация Telegram Mini App
@@ -79,14 +76,6 @@ function App() {
       // Получаем данные пользователя Telegram
       setTelegramUser(window.Telegram.WebApp.initDataUnsafe?.user);
 
-      // Здесь можно подписаться на события Mini App, например, закрытие
-      // window.Telegram.WebApp.onEvent('viewportChanged', onViewportChanged);
-
-      // Пример использования главной кнопки Telegram
-      window.Telegram.WebApp.MainButton.setText('Подключить кошелек');
-      window.Telegram.WebApp.MainButton.show();
-      window.Telegram.WebApp.MainButton.onClick(handleConnectWallet);
-
        // Скрываем кнопку "назад" по умолчанию, если она не нужна
        window.Telegram.WebApp.BackButton.hide();
 
@@ -96,152 +85,57 @@ function App() {
     }
   }, []);
 
-  // --- Функции для взаимодействия с бэкендом и TON Connect ---
-
-  const handleConnectWallet = async () => {
-    console.log("Attempting to connect wallet...");
-    // Здесь фронтенд должен запросить у бэкенда ссылку для подключения
-    // Пример:
-    try {
-        // Предполагаем, что у вас есть бэкенд, который на эндпоинте /generate-connect-link
-        // возвращает ссылку, сгенерированную с помощью connector.connect()
-        const response = await fetch('/api/generate-connect-link', {
-             method: 'POST',
-             headers: {
-                 'Content-Type': 'application/json',
-                 // Возможно, нужно передать user.id или initDataUnsafe для идентификации пользователя на бэкенде
-                 'X-Telegram-Init-Data': window.Telegram.WebApp.initData || ''
-             },
-             // body: JSON.stringify({ userId: telegramUser?.id }) // Отправляем ID пользователя, если нужно
-        });
-        const data = await response.json();
-        const link = data.link; // Ожидаем получить link в ответе
-
-        if (link) {
-            setConnectionLink(link);
-            // Открываем ссылку с помощью Telegram Mini Apps API
-            window.Telegram.WebApp.openLink(link);
-
-            // Здесь также нужно начать слушать на бэкенде (или через WebSocket)
-            // статус подключения для этого пользователя.
-            // Когда бэкенд обнаружит, что кошелек подключен, он должен уведомить фронтенд.
-
-            // Пример: Подписка на статус подключения (нужен WebSocket или long polling)
-            // subscribeToConnectionStatus(telegramUser.id);
-
-        } else {
-            console.error("Failed to get connection link from backend");
-            // Показать ошибку пользователю
-        }
-
-    } catch (error) {
-        console.error("Error fetching connection link:", error);
-        // Показать ошибку пользователю
-    }
-  };
-
-  // Placeholder функция для отправки платежа
-  const handleSendPayment = async () => {
-    console.log("Attempting to send payment...");
-     // Здесь фронтенд должен запросить у бэкенда сформировать транзакцию
-     // и получить результат вызова connector.sendTransaction()
-    try {
-        // Пример:
-        const paymentDetails = {
-            recipient: 'ВАШ_АДРЕС_КОШЕЛЬКА_TON', // Адрес, куда отправляем TON
-            amount: '100000000', // Сумма в nanoTON (например, 0.1 TON)
-            paymentId: 'order-abc-123', // Уникальный ID платежа
-            // Возможно, другие данные, как comment, stateInit и т.д.
-        };
-
-        const response = await fetch('/api/send-payment', {
-             method: 'POST',
-             headers: {
-                 'Content-Type': 'application/json',
-                 'X-Telegram-Init-Data': window.Telegram.WebApp.initData || '' // Передаем initData для верификации на бэкенде
-             },
-             body: JSON.stringify(paymentDetails)
-        });
-        const result = await response.json(); // Ожидаем результат транзакции
-
-        if (result && result.success) {
-            console.log("Payment initiated successfully:", result.txHash);
-             // Показать пользователю сообщение об успехе или о необходимости подтвердить в кошельке
-            alert("Платеж успешно инициирован! Пожалуйста, подтвердите его в вашем кошельке.");
-             // Возможно, показать ссылку на explorer для отслеживания транзакции
-        } else {
-            console.error("Payment failed:", result.error);
-            alert("Ошибка при инициации платежа: " + (result.error || "Неизвестная ошибка"));
-             // Показать ошибку пользователю
-        }
-
-    } catch (error) {
-        console.error("Error sending payment:", error);
-        alert("Произошла ошибка при отправке платежа.");
-         // Показать ошибку пользователю
-    }
-  };
-
-   // Пример функции, которая будет вызвана, когда бэкенд уведомит фронтенд о подключении
-   // (Эта часть требует дополнительной реализации бэкенда и механизма уведомлений)
+  // Временные заглушки для ESLint, пока логика не реализована
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [walletConnected, setWalletConnected] = useState(false);
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   const onWalletConnected = () => {
-       setWalletConnected(true);
-        window.Telegram.WebApp.MainButton.setText('Отправить 0.1 TON'); // Меняем текст кнопки
-        window.Telegram.WebApp.MainButton.onClick(handleSendPayment); // Меняем действие кнопки
-        alert("Кошелек успешно подключен!");
-   };
+  const [connectionLink, setConnectionLink] = useState<string | null>(null);
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   const onWalletConnected = () => {}; // Пустая заглушка функции
 
-   // В реальном приложении вам нужен механизм (например, WebSocket) для получения
-   // уведомлений с бэкенда, например, когда кошелек подключился или транзакция подтверждена.
-   // useEffect(() => {
-   //     // Установка соединения с WebSocket или long polling
-   //     const ws = new WebSocket(`ws://your-backend.com/ws?userId=${telegramUser?.id}`);
-   //     ws.onmessage = (event) => {
-   //         const message = JSON.parse(event.data);
-   //         if (message.type === 'wallet_connected') {
-   //              onWalletConnected();
-   //         }
-   //          // Обработка других типов сообщений, например, подтверждение платежа
-   //     };
-   //     return () => ws.close();
-   // }, [telegramUser]); // Зависит от наличия данных пользователя
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Прием платежей TON</h1>
-        {telegramUser && (
-          <p>Добро пожаловать, {telegramUser.first_name}!</p>
-        )}
+    <div className="app-container">
+      {/* Верхняя панель (Хедер) */}
+      <div className="header-panel">
+        {/* Placeholder для иконки депа/TON */}
+        <div className="header-icon left">💰 [TON Logo / Бачей]</div>
+        {/* Placeholder для иконки информации */}
+        <div className="header-icon right">❓ [Инфо Icon]</div>
+        {/* Placeholder для иконки проекта/фазы */}
+        <div className="header-project-icon center">🏗️ [Project Icon / Phase]</div>
+      </div>
 
-        {!walletConnected ? (
-            <>
-              <p>Подключите ваш TON кошелек, чтобы совершить платеж.</p>
-               {/* Кнопка MainButton Telegram будет использоваться для этого */}
-               {/* <button onClick={handleConnectWallet}>Подключить кошелек</button> */}
-               {/* {connectionLink && (
-                 <p>Используйте эту ссылку для подключения: <a href={connectionLink} target="_blank" rel="noopener noreferrer">{connectionLink}</a></p>
-               )} */}
-            </>
-        ) : (
-            <>
-             <p>Кошелек подключен!</p>
-             <p>Теперь вы можете отправить платеж.</p>
-              {/* Кнопка MainButton Telegram будет использоваться для этого */}
-             {/* <button onClick={handleSendPayment}>Отправить 0.1 TON</button> */}
+      {/* Центральная область контента */}
+      <div className="content-area">
+        {/* Placeholder для центральной PNG картинки фона */}
+        <div className="background-image-placeholder"></div>
 
-             {/* Здесь может быть форма ввода суммы и других деталей платежа */}
-            </>
-        )}
+        {/* Здесь будут наложены элементы: путаны, индикаторы, кнопки взаимодействия */}
+        <div className="overlay-elements">
+          {/* Пример: Placeholder для индикатора Hunger */}
+          <div className="indicator hunger">❤️ Hunger: [Value]</div>
+           {/* Пример: Placeholder для индикатора Happy */}
+          <div className="indicator happy">😊 Happy: [Value]</div>
+          {/* Placeholder для путан и их статусов */}
+          <div className="prostitutes-area"></div>
+           {/* Placeholder для кнопок Auto/Refresh */}
+           <div className="action-buttons"></div>
+        </div>
+      </div>
 
-        {/* Элементы UI для ввода деталей платежа могут быть здесь */}
-        {/* Например:
-        <input type="number" placeholder="Введите сумму в TON" />
-        <button onClick={handleSendPayment}>Оплатить</button>
-        */}
+      {/* Нижняя навигационная панель (Футер) */}
+      <div className="footer-nav">
+        {/* Иконки навигации */}
+        <div className="nav-icon">🛒 Притон</div>
+        <div className="nav-icon">👤 Профиль</div>
+        <div className="nav-icon">💎 Пожертвование</div>
+        <div className="nav-icon">🤝 Друзья</div>
+      </div>
 
-      </header>
+       {/* Placeholder для других элементов, например, модальных окон */}
+      <div className="modal-placeholder"></div>
+
     </div>
   );
 }
