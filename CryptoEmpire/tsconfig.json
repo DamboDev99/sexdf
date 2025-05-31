@@ -8,10 +8,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src/backend"
+    "rootDir": "./src"
   },
   "include": [
-    "src/backend/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
