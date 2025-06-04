@@ -9,14 +9,21 @@ export async function initRedisClient(): Promise<void> {
     console.log("initRedisClient called.");
     if (!process.env.REDIS_URL) {
         console.error("REDIS_URL is not set in .env");
-        return;
+        throw new Error("REDIS_URL is not set in environment variables.");
     }
     console.log("REDIS_URL found, creating client...");
     client = createClient({ url: process.env.REDIS_URL });
-    client.on('error', err => console.error('Redis Client Error', err));
-    console.log("Attempting to connect to Redis...");
-    await client.connect();
-    console.log("Redis client connected successfully.");
+
+    client.on('error', err => console.error('Redis Client Error during operation:', err));
+
+    try {
+        console.log("Attempting to connect to Redis...");
+        await client.connect();
+        console.log("Redis client connected successfully.");
+    } catch (error) {
+        console.error("Failed to connect to Redis:", error);
+        throw new Error(`Failed to connect to Redis: ${error instanceof Error ? error.message : String(error)}`);
+    }
 }
 
 export class TonConnectStorage implements IStorage {
